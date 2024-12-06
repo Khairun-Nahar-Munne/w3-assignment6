@@ -1,4 +1,3 @@
-# tests/url_status_test.py
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from config.config import Config
@@ -8,7 +7,7 @@ from drivers.chrome_driver import get_chrome_driver
 
 def run_url_status_test(driver):
     """
-    Test URL status codes
+    Test URL status codes for all links on the homepage.
     
     :param driver: Selenium WebDriver
     :return: List of test results
@@ -16,6 +15,7 @@ def run_url_status_test(driver):
     test_results = []
     
     try:
+        # Open the base URL (homepage)
         driver.get(Config.TEST_SITE_URL)
         
         # Find all links on the page
@@ -26,11 +26,16 @@ def run_url_status_test(driver):
             if href and href.startswith('http'):
                 status_code = check_url_status(href)
                 
+                # Check for 404 errors
+                passed = status_code < 400
+                if status_code == 404:
+                    passed = False
+                
                 result = {
-                    'page_url': driver.current_url,
+                    'property_page_url': driver.current_url,
                     'testcase': 'URL Status Check',
-                    'url': href,
-                    'passed': status_code < 400,
+                    'available_url': href,
+                    'passed': passed,
                     'comments': f'Status Code: {status_code}'
                 }
                 

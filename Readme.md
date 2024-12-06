@@ -27,3 +27,9 @@ project_structure/
 │
 ├── requirements.txt
 └── main.py
+
+
+ python3 -m  tests.h1_tag_test
+  python3 -m  tests.html_tag_sequence_test
+
+  python3 main.py
