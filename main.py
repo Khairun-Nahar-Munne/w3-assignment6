@@ -4,7 +4,8 @@ from config.config import Config
 from tests.h1_tag_test import run_h1_tag_test
 from tests.url_status_test import run_url_status_test
 from tests.html_tag_sequence_test import run_html_tag_sequence_test
-
+from tests.currency_filter_test import run_currency_filter_test
+from tests.image_alt_test import run_image_alt_test
 # Import other test modules as needed
 
 def main():
@@ -20,6 +21,11 @@ def main():
                 run_url_status_test(driver)
             elif test == 'html_tag_sequence_test':
                 run_html_tag_sequence_test(driver)
+            elif test == 'currency_filter_test':
+                run_currency_filter_test(driver)
+            elif test == 'image_alt_test':
+                run_image_alt_test(driver)
+                
             # Add other test conditions as needed
     
     except Exception as e:
