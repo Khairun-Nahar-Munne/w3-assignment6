@@ -6,6 +6,7 @@ from tests.url_status_test import run_url_status_test
 from tests.html_tag_sequence_test import run_html_tag_sequence_test
 from tests.currency_filter_test import run_currency_filter_test
 from tests.image_alt_test import run_image_alt_test
+from tests.script_data_test import run_scraping_and_save_report
 # Import other test modules as needed
 
 def main():
@@ -25,7 +26,9 @@ def main():
                 run_currency_filter_test(driver)
             elif test == 'image_alt_test':
                 run_image_alt_test(driver)
-                
+            else:
+                run_scraping_and_save_report(driver)
+
             # Add other test conditions as needed
     
     except Exception as e:

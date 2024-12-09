@@ -1,0 +1,34 @@
+{
+  "US": {
+    "passed": true,
+    "details": []
+  },
+  "CA": {
+    "passed": true,
+    "details": []
+  },
+  "BE": {
+    "passed": true,
+    "details": []
+  },
+  "IE": {
+    "passed": true,
+    "details": []
+  },
+  "AU": {
+    "passed": true,
+    "details": []
+  },
+  "SG": {
+    "passed": true,
+    "details": []
+  },
+  "AE": {
+    "passed": true,
+    "details": []
+  },
+  "BD": {
+    "passed": true,
+    "details": []
+  }
+}
