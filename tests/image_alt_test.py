@@ -1,21 +1,22 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config.config import Config
 from utils.excel_reporter import ExcelReporter
-from utils.web_utils import wait_for_element
 from drivers.chrome_driver import get_chrome_driver
+from utils.web_utils import wait_for_element
 
 def run_image_alt_test(driver):
     """
     Test to ensure that all images on the page have an alt attribute.
+    If all images have alt text, report Pass. Otherwise, report Fail with details of missing alt attributes.
     
     :param driver: Selenium WebDriver
     :return: List of test results
     """
     test_results = []
     base_url = Config.TEST_SITE_URL
+    all_images_have_alt = True  # Flag to check if all images pass
 
     try:
         # Navigate to the test URL
@@ -23,34 +24,39 @@ def run_image_alt_test(driver):
         print(f"Navigating to {base_url}")
 
         # Wait for the page to load
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "img")))
+        wait_for_element(driver, By.TAG_NAME, "img")
 
         # Find all images on the page
         images = driver.find_elements(By.TAG_NAME, "img")
         print(f"Found {len(images)} images on the page.")
 
+        # List to store the missing alt text image sources
+        missing_alt_images = []
+
         # Iterate through all images and check the alt attribute
         for image in images:
             alt_text = image.get_attribute("alt")
 
-            # Check if alt attribute is missing
+            # If alt attribute is missing, log the failure
             if not alt_text:
-                print(f"Image missing alt attribute: {image.get_attribute('src')}")
-                test_results.append({
-                    'image_src': image.get_attribute('src'),
-                    'alt_text': "N/A",
-                    'testcase': "Image Alt Attribute",
-                    'passed': False,
-                    'comments': "Alt attribute is missing."
-                })
-            else:
-                test_results.append({
-                    'image_src': image.get_attribute('src'),
-                    'alt_text': alt_text,
-                    'testcase': "Image Alt Attribute",
-                    'passed': True,
-                    'comments': "Alt attribute is present."
-                })
+                all_images_have_alt = False
+                missing_alt_images.append(image.get_attribute('src'))
+
+        # Prepare the test result
+        if all_images_have_alt:
+            test_results.append({
+                'page_url': base_url,
+                'testcase': "Image Alt Attribute Test",
+                'passed': True,
+                'comments': "All images have alt attributes."
+            })
+        else:
+            test_results.append({
+                'page_url': base_url,
+                'testcase': "Image Alt Attribute Test",
+                'passed': False,
+                'comments': f"Missing alt attributes for images: {', '.join(missing_alt_images)}"
+            })
 
         # Generate an Excel report
         print("Generating Excel report...")
@@ -60,8 +66,7 @@ def run_image_alt_test(driver):
     except Exception as e:
         print(f"Error occurred during the test: {str(e)}")
         test_results.append({
-            'image_src': "N/A",
-            'alt_text': "N/A",
+            'page_url': base_url,
             'testcase': "Image Alt Attribute Test",
             'passed': False,
             'comments': f"Test failed with error: {str(e)}"

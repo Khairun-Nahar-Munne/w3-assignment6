@@ -6,23 +6,30 @@ from drivers.chrome_driver import get_chrome_driver
 
 def check_html_tag_sequence(tags):
     """
-    Check if the HTML tag sequence from H1 to H6 is in the correct order.
+    Check if the HTML tag sequence from H1 to H6 is in the correct order and identify missing or broken tags.
     
     :param tags: List of HTML tag elements (e.g., H1, H2, etc.)
-    :return: Tuple (True if sequence is correct, False if any tag is missing or out of order, broken_sequence)
+    :return: Tuple (True if sequence is correct, False otherwise, missing_tags, broken_sequence, detected_sequence)
     """
     expected_sequence = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
     tag_sequence = [tag.lower() for tag in tags]  # Get the lowercase representation of tag names
-    last_tag = 0  # To ensure that the sequence is not broken
+    last_tag_index = -1  # To track the order
     broken_sequence = []
+    missing_tags = []
 
-    for tag in tag_sequence:
-        if expected_sequence.index(tag) < last_tag:
-            broken_sequence.append(tag)  # Add the broken tag to the list
-        last_tag = expected_sequence.index(tag)
+    # Iterate through expected tags and check the sequence
+    for i, tag in enumerate(expected_sequence):
+        if tag in tag_sequence:
+            current_index = tag_sequence.index(tag)
+            if current_index < last_tag_index:
+                broken_sequence.append(tag)  # Tag is out of order
+            last_tag_index = current_index
+        else:
+            missing_tags.append(tag)  # Tag is missing
 
-    # Return whether the sequence is correct, and any broken sequences
-    return len(broken_sequence) == 0, broken_sequence
+    # Return result: is sequence correct, missing tags, broken sequence, and the detected sequence
+    is_correct = len(broken_sequence) == 0 and len(missing_tags) == 0
+    return is_correct, missing_tags, broken_sequence, tag_sequence
 
 
 def run_html_tag_sequence_test(driver):
@@ -42,15 +49,26 @@ def run_html_tag_sequence_test(driver):
 
         # Get all heading tags from H1 to H6
         heading_tags = driver.find_elements(By.XPATH, '//h1 | //h2 | //h3 | //h4 | //h5 | //h6')
-        
+
+        # Extract the tag names
+        tag_names = [tag.tag_name for tag in heading_tags]
+
         # Check the sequence of the heading tags
-        is_sequence_correct, broken_sequence = check_html_tag_sequence([tag.tag_name for tag in heading_tags])
+        is_sequence_correct, missing_tags, broken_sequence, detected_sequence = check_html_tag_sequence(tag_names)
 
+        # Determine comments based on the results
         if is_sequence_correct:
-            comments = 'Tag sequence is correct'
+            comments = 'Tag sequence is correct.'
         else:
-            comments = f'Tag sequence is broken or missing. Broken sequence: {", ".join(broken_sequence)}'
+            comments = []
+            if missing_tags:
+                comments.append(f'Missing tags: {", ".join(missing_tags)}')
+            if broken_sequence:
+                 comments.append(f'Broken sequence: {", ".join(detected_sequence)}')  # Add detected sequence
+           
+            comments = ' '.join(comments)
 
+        # Add results to the test report
         test_results.append({
             'page_url': base_url,
             'testcase': 'HTML Tag Sequence Test (H1-H6)',
@@ -60,10 +78,16 @@ def run_html_tag_sequence_test(driver):
 
         # Generate a consolidated report
         ExcelReporter.generate_report(test_results, 'html_tag_sequence_homepage_test')
-        print("Test completed. Results saved.")
-        
+        print("HTML tag sequence test completed. Results saved.")
+
     except Exception as e:
         print(f"Error occurred during the test: {str(e)}")
+        test_results.append({
+            'page_url': base_url,
+            'testcase': 'HTML Tag Sequence Test (H1-H6)',
+            'passed': False,
+            'comments': f"Test failed with error: {str(e)}"
+        })
 
     return test_results
 

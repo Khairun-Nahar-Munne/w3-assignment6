@@ -31,7 +31,7 @@ def run_h1_tag_test(driver):
 
         # Generate a consolidated report
         ExcelReporter.generate_report(test_results, 'h1_tag_homepage_test')
-        print("Test completed. Results saved.")
+        print("h1 tag test completed. Results saved.")
         
     except Exception as e:
         print(f"Error occurred during the test: {str(e)}")

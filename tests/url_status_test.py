@@ -7,12 +7,16 @@ from drivers.chrome_driver import get_chrome_driver
 
 def run_url_status_test(driver):
     """
-    Test URL status codes for all links on the homepage.
+    Test URL status codes for unique links on the homepage.
+    Save only broken/missing URLs (404) in the report. 
+    Show "All Pass" if no 404s are found.
     
     :param driver: Selenium WebDriver
     :return: List of test results
     """
     test_results = []
+    unique_urls = set()  # Set to store unique URLs
+    broken_urls = []  # List to store only broken URLs
     
     try:
         # Open the base URL (homepage)
@@ -24,27 +28,39 @@ def run_url_status_test(driver):
         for link in links:
             href = link.get_attribute('href')
             if href and href.startswith('http'):
-                status_code = check_url_status(href)
-                
-                # Check for 404 errors
-                passed = status_code < 400
-                if status_code == 404:
-                    passed = False
-                
+                unique_urls.add(href)  # Add URL to the set (ensures uniqueness)
+        
+        # Test each unique URL
+        for url in unique_urls:
+            status_code = check_url_status(url)
+            
+            # Check if the URL is broken (status code is 404)
+            if status_code == 404:
                 result = {
                     'property_page_url': driver.current_url,
                     'testcase': 'URL Status Check',
-                    'available_url': href,
-                    'passed': passed,
-                    'comments': f'Status Code: {status_code}'
+                    'passed': False,
+                    'comments': f'Broken URL: {url} '
                 }
-                
-                test_results.append(result)
-        
-        # Generate report with a different sheet name
-        ExcelReporter.generate_report(test_results, 'url_status_test')
+                broken_urls.append(result)  # Collect only broken URLs
+            
+        # Save only broken URLs to the report
+        if broken_urls:
+            ExcelReporter.generate_report(broken_urls, 'broken_url_status_test')
+            print(f"Broken URLs found: {len(broken_urls)}. Results saved.")
+        else:
+            # If no broken URLs, create a simple "All Pass" report
+            test_results.append({
+                'property_page_url': driver.current_url,
+                'testcase': 'URL Status Check',
+                'passed': True,
+                'comments': 'All Pass. No 404 errors found.'
+            })
+            ExcelReporter.generate_report(test_results, 'broken_url_status_test')
+            print("All Pass. No broken URLs found.")
         
     except Exception as e:
+        # Handle exceptions and save error details
         result = {
             'page_url': Config.TEST_SITE_URL,
             'testcase': 'URL Status Check',
@@ -52,8 +68,10 @@ def run_url_status_test(driver):
             'comments': f'Error: {str(e)}'
         }
         test_results.append(result)
+        ExcelReporter.generate_report(test_results, 'broken_url_status_test')
+        print("An error occurred. Results saved.")
     
-    return test_results
+    return broken_urls
 
 if __name__ == "__main__":
     # Initialize WebDriver (make sure ChromeDriver is installed and in PATH)

@@ -1,6 +1,6 @@
 # config/config.py
 class Config:
-    TEST_SITE_URL = "https://www.alojamiento.io/property/villa-casa-magna-with-private-pool-wi-fi-and-air-conditioning/HA-6515551551"
+    TEST_SITE_URL = "https://www.alojamiento.io/"
     CHROME_DRIVER_PATH = None  # Will be set dynamically
     REPORT_DIRECTORY = "test_reports/"
     

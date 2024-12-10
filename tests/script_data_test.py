@@ -82,7 +82,7 @@ def run_scraping_and_save_report(driver):
             
             # Generate a consolidated report with the extracted data
             ExcelReporter.generate_report(test_results, 'script_data_scraping_test')
-            print("Test completed. Results saved.")
+            print("Data Scrapping completed. Results saved.")
         else:
             print("Failed to scrape data.")
         
