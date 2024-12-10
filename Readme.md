@@ -2,73 +2,50 @@
 
 ## Description
 
-This script automates the testing of a vacation rental details page to validate essential elements and functionality, specifically for SEO purposes. The script checks several test cases such as:
+This script automates the testing of a vacation rental details page to validate essential elements and functionality, specifically for SEO purposes using Python, Selenium and Pandas. Goals of this assignment:
+- Testing SEO-related elements.
+- Validating URL.
+- Generating Excel files to record test results.
 
-- **H1 tag existence**: Verifies that an H1 tag is present on the page.
-- **HTML tag sequence**: Ensures that the H1-H6 tags are correctly sequenced.
-- **Image alt attribute**: Checks if images have a valid alt attribute.
-- **URL status code**: Ensures all URLs on the page return valid status codes (no 404 errors).
-- **Currency filter functionality**: Validates that the property tile currency changes when the currency filter is used.
-- **Script data extraction**: Extracts data from the page's scripts and records it in an Excel file.
-
-The results of the tests will be recorded in an Excel file, capturing any identified issues.
 
 ## Table of Contents
 
 1. [Features](#features)
-2. [Technologies Used](#technologies-used)
-3. [Prerequisites](#prerequisites)
-4. [Project Structure](#project-structure)
+2. [Prerequisites](#prerequisites)
+3. [Project Structure](#project-structure)
+3. [Excel Sheet Model](#excel-sheet-model)
 5. [Getting Started](#getting-started)
    - [Installation](#installation)
-   - [Database Configuration](#database-configuration)
    - [Running the Application](#running-the-application)
-6. [Usage](#usage)
-7. [Database Schema](#database-schema)
+6. [Contributing](#contributing)
 
-## Requirements
+## Features
+- The script checks several test cases such as:
 
-### Tools:
+  - **H1 tag existence**: Verifies that an H1 tag is present on the page.
+  - **HTML tag sequence**: Ensures that the H1-H6 tags are correctly sequenced.
+  - **Image alt attribute**: Checks if images have a valid alt attribute.
+  - **URL status code**: Ensures all URLs on the page return valid status codes (no 404 errors).
+  - **Currency filter functionality**: Validates that the property tile currency changes when the currency filter is used.
+  - **Script data extraction**: Extracts data from the page's scripts and records it in an Excel file.
 
-- **Python** (Version: 3.x)
-- **Selenium** for web automation.
-- **Pandas** for generating Excel reports.
-- **Requests** for checking URL status codes.
+- The results of the tests will be recorded in an Excel file, capturing any identified issues.
 
-### Browser:
+## Prerequisites
 
-- **Google Chrome** or **Firefox** (make sure to use the corresponding WebDriver version).
-- You can download the Chrome WebDriver from [here](https://sites.google.com/chromium.org/driver/), or the Firefox WebDriver from [here](https://github.com/mozilla/geckodriver/releases).
+Ensure the following requirements are met before running the automation scripts:
 
-### Test Site URL:
+1. **Python**  
+   - Version: 3.8 or later.  
+   - [Download Python](https://www.python.org/downloads/)
 
-- [https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289](https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289)
+2. **Browser**  
+   - Google Chrome or Mozilla Firefox must be installed.  
+   - [Download Google Chrome](https://www.google.com/chrome/)  
+   - [Download Firefox](https://www.mozilla.org/firefox/)
 
-### Tests to Perform:
-
-- **H1 Tag Existence Test**: The script will check if the page contains an H1 tag. If missing, the test will fail.
-- **HTML Tag Sequence Test**: The script checks that the H1-H6 tags appear in the correct order (H1 before H2, H2 before H3, etc.). If any sequence is broken or missing, the test will fail.
-- **Image Alt Attribute Test**: Verifies if all images on the page have an alt attribute. Missing alt attributes will cause the test to fail.
-- **URL Status Code Test**: Checks all URLs on the page to ensure they do not return a 404 (Page Not Found) error.
-- **Currency Filtering Test**: Tests the property tiles to confirm that their currency changes when a new currency is selected.
-- **Script Data Scraping**: Scrapes specific data from the scripts and records it in an Excel file, including:
-  - Site URL
-  - Campaign ID
-  - Site Name
-  - Browser
-  - Country Code
-  - IP address
-
-## Acceptance Criteria
-
-1. **Reusability**: The code and methods should be reusable for different pages or test cases.
-2. **Output Format**: The script will generate an excel report for individual test cases.
-3. **Report Model**:
-   - The report will have the following columns:
-     - `page_url`: The URL of the page being tested.
-     - `testcase`: The name of the test case.
-     - `passed`: Whether the test passed or failed.
-     - `comments`: Additional information (such as the status code or missing attributes).
+3. **WebDriver Manager**
+    - The project uses the `webdriver_manager` library to automatically download and manage the appropriate WebDriver version, so no manual installation is required.  
 
 ## Project Structure
 
@@ -101,6 +78,30 @@ The results of the tests will be recorded in an Excel file, capturing any identi
   └── main.py
 ```
 
+- `config.py`: The config.py file contains configuration settings for running automated tests. It contains the URL of the page on which automated tests are running. Test Site URL: [https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289](https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289)
+
+- `chrome_driver.py`: The chrome_driver.py file provides a utility function to configure and instantiate a Chrome WebDriver for Selenium-based testing. 
+
+- `tests`: The tests folder contains all necessary automated tests files. 
+
+- `excel_reporter.py`: The excel_reporter.py file provides functionality for generating and managing Excel reports for automated test results using Pandas and Openpyxl. It ensures that data is properly organized and stored across multiple sheets within a single Excel file.
+
+- `web_utils.py`: The web_utils.py file provides utility functions to assist with common web automation and validation tasks. These functions streamline operations like checking URL statuses and waiting for web elements during Selenium-based tests.
+
+## Excel Sheet Model:
+ - The sheet will have the following columns(Except script_data_test):
+     - `page_url`: The URL of the page being tested.
+     - `testcase`: The name of the test case.
+     - `passed`: Whether the test passed or failed.
+     - `comments`: Additional information (such as the status code or missing attributes).
+
+ - The script_data_test excel sheet will have the following columns:
+     - `SiteURL`: Scrape SiteURL from Script data.
+     - `CampaignID`: Scrape CampaignID from Script data.
+     - `SiteName`: Scrape SiteName from Script data.
+     - `Browser`: Scrape Browser from Script data.
+     - `CountryCode`: Scrape CountryCode from Script data.
+     - `IP`: Scrape IP from Script data.
 ## Getting Started
 
 ### Installation
@@ -116,10 +117,11 @@ The results of the tests will be recorded in an Excel file, capturing any identi
 
    ```bash
    python3 -m venv env
-   source env/bin/activate   # On Windows use `source .env/bin/activate
+   source env/bin/activate   # On Windows use `env\Scripts\activate`
    ```
 
 3. Install the dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
@@ -132,7 +134,7 @@ The results of the tests will be recorded in an Excel file, capturing any identi
    python3 main.py
    ```
 
-2. Run Indivitual Tests:
+2. Run Indivitual Tests (If don't want to run all tests at once):
 
 - **H1 Tag Existence Test**:
   ```bash
@@ -162,11 +164,13 @@ The results of the tests will be recorded in an Excel file, capturing any identi
 
 2. See Execel File:
 
-   Test results are saved into test_report folder as test_report.xlsx. Each test file will generate an individual sheet into the excel file after running each test file.
+    ```bash
+    Project rooot > test_reports > test_report.xlsx
+    ```
+  - Test results are saved into test_report folder as test_report.xlsx. Each test file will generate an individual sheet into the excel file after running each test file.
+  - Individual excel sheet will also be generated for running same test file. For example, h1_tag_homepage_test, h1_tag_homepage_test1, h1_tag_homepage_test2, etc.
 
-   ```bash
-   Project rooot > test_reports > test_report.xlsx
-   ```
+   
 
 ## Contributing
 

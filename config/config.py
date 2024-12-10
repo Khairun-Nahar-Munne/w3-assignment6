@@ -1,6 +1,6 @@
 # config/config.py
 class Config:
-    TEST_SITE_URL = "https://www.alojamiento.io/"
+    TEST_SITE_URL = "https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289"
     CHROME_DRIVER_PATH = None  # Will be set dynamically
     REPORT_DIRECTORY = "test_reports/"
     
