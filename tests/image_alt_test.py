@@ -20,8 +20,8 @@ def run_image_alt_test(driver):
 
     try:
         # Navigate to the test URL
+        print("Starting image alt attribute test..")
         driver.get(base_url)
-        print(f"Navigating to {base_url}")
 
         # Wait for the page to load
         wait_for_element(driver, By.TAG_NAME, "img")

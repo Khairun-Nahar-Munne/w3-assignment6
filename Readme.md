@@ -24,8 +24,8 @@ This script automates the testing of a vacation rental details page to validate 
 
   - **H1 tag existence**: Verifies that an H1 tag is present on the page.
   - **HTML tag sequence**: Ensures that the H1-H6 tags are correctly sequenced.
-  - **Image alt attribute**: Checks if images have a valid alt attribute.
-  - **URL status code**: Ensures all URLs on the page return valid status codes (no 404 errors).
+  - **Image alt attribute**: Checks If image alter attribute is missing.
+  - **URL status code**: Checks if any URL status is 404. If any 404 URL status existed, it is reported the broken url in comment
   - **Currency filter functionality**: Validates that the property tile currency changes when the currency filter is used.
   - **Script data extraction**: Extracts data from the page's scripts and records it in an Excel file.
 
@@ -40,9 +40,8 @@ Ensure the following requirements are met before running the automation scripts:
    - [Download Python](https://www.python.org/downloads/)
 
 2. **Browser**  
-   - Google Chrome or Mozilla Firefox must be installed.  
+   - Google Chrome must be installed.  
    - [Download Google Chrome](https://www.google.com/chrome/)  
-   - [Download Firefox](https://www.mozilla.org/firefox/)
 
 3. **WebDriver Manager**
     - The project uses the `webdriver_manager` library to automatically download and manage the appropriate WebDriver version, so no manual installation is required.  
@@ -78,9 +77,18 @@ Ensure the following requirements are met before running the automation scripts:
   └── main.py
 ```
 
-- `config.py`: The config.py file contains configuration settings for running automated tests. It contains the URL of the page on which automated tests are running. Test Site URL: [https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289](https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289)
+- `config.py`: The config.py file contains configuration settings for running automated tests. It contains the URL of the page on which automated tests are running. Test Site URL: [https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289](https://www.alojamiento.io/property/chic-apartament-retiro-park-i-swimming-pool-elevenhost/BC-5455289). You can change this test url in config.py to test other pages. 
 
 - `chrome_driver.py`: The chrome_driver.py file provides a utility function to configure and instantiate a Chrome WebDriver for Selenium-based testing. 
+If you want to run the browser in headless mode, you need to uncomment these lines:
+    ```bash
+    #chrome_options.add_argument("--headless=new")  # New headless mode
+    #chrome_options.add_argument("--window-size=1920,1080")
+    #chrome_options.add_argument("--disable-gpu")
+    #if you use windows
+    #chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+    ```
+  Otherwise, keep these lines commented.
 
 - `tests`: The tests folder contains all necessary automated tests files. 
 
@@ -165,7 +173,7 @@ Ensure the following requirements are met before running the automation scripts:
 2. See Execel File:
 
     ```bash
-    Project rooot > test_reports > test_report.xlsx
+    w3-assignment7 > test_reports > test_report.xlsx
     ```
   - Test results are saved into test_report folder as test_report.xlsx. Each test file will generate an individual sheet into the excel file after running each test file.
   - Individual excel sheet will also be generated for running same test file. For example, h1_tag_homepage_test, h1_tag_homepage_test1, h1_tag_homepage_test2, etc.

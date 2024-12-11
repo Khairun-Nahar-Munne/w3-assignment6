@@ -63,6 +63,7 @@ def run_scraping_and_save_report(driver):
 
     try:
         # First, load the homepage
+        print("Starting scrapping from script data..")
         driver.get(base_url)
         wait_for_element(driver, By.TAG_NAME, 'h1')
 

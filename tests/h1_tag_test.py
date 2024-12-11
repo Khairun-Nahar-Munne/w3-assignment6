@@ -17,6 +17,7 @@ def run_h1_tag_test(driver):
 
     try:
         # First, check the homepage for H1 tag existence
+        print("Starting h1 tag test...")
         driver.get(base_url)
         wait_for_element(driver, By.TAG_NAME, 'h1')
 

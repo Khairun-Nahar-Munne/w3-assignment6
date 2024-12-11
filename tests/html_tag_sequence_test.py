@@ -44,6 +44,7 @@ def run_html_tag_sequence_test(driver):
 
     try:
         # Check the homepage for H1-H6 tag sequence
+        print("Starting HTML tag sequence test...")
         driver.get(base_url)
         wait_for_element(driver, By.TAG_NAME, 'h1')
 

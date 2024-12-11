@@ -20,6 +20,7 @@ def run_url_status_test(driver):
     
     try:
         # Open the base URL (homepage)
+        print("Starting url status test...")
         driver.get(Config.TEST_SITE_URL)
         
         # Find all links on the page
