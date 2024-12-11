@@ -21,7 +21,7 @@ def run_currency_filter_test(driver):
 
     try:
         # Navigate to the test URL
-        print(f"Navigating to {base_url}...")
+        print("Starting currency filtering test...")
         driver.get(base_url)
         
         # Wait for page to load
